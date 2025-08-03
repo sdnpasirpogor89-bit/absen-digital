@@ -7,11 +7,598 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* CSS tetap sama seperti sebelumnya */
+        /* CSS DIAMBIL DARI VERSI SEBELUMNYA */
+        :root {
+            --blue-pastel: #a0d2eb;
+            --yellow-pastel: #fde8a0;
+            --green-pastel: #c1e1c1;
+            --pink-pastel: #f9c5d1;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-dark: #333333;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --warning: #f39c12;
+        }
+        * {margin: 0; padding: 0; box-sizing: border-box;}
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #6dd5ed, #2193b0);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .app-container {
+            width: 100%; max-width: 1200px; background-color: var(--white);
+            border-radius: 20px; box-shadow: 0 10px 30px var(--shadow);
+            overflow: hidden; position: relative; min-height: 85vh;
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .header {
+            background: linear-gradient(135deg, var(--blue-pastel), var(--green-pastel)); 
+            padding: 20px; 
+            text-align: center; 
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .logo {
+            width: 100px; height: 100px; 
+            background: linear-gradient(135deg, #fde8a0, #f9c5d1);
+            border-radius: 50%; 
+            margin: 0 auto 15px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-size: 40px; 
+            color: #e67e22; 
+            box-shadow: 0 4px 10px var(--shadow);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .school-name {
+            font-size: 28px; 
+            font-weight: 800; 
+            color: var(--text-dark); 
+            margin-bottom: 5px; 
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .subtitle {
+            font-size: 18px; 
+            font-weight: 600; 
+            color: #555;
+        }
+        .slide-container {
+            display: none; 
+            padding: 20px; 
+            min-height: 65vh;
+        }
+        .slide-container.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .login-form {
+            max-width: 400px; 
+            margin: 30px auto; 
+            padding: 30px; 
+            background-color: var(--light-gray); 
+            border-radius: 15px; 
+            box-shadow: 0 5px 15px var(--shadow);
+            animation: scaleIn 0.6s ease-out;
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .form-group {
+            margin-bottom: 20px; 
+            position: relative;
+        }
+        .form-group label {
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            color: #555;
+        }
+        .form-group input {
+            width: 100%; 
+            padding: 12px 15px; 
+            border: 2px solid var(--blue-pastel); 
+            border-radius: 10px; 
+            font-size: 16px; 
+            transition: all 0.3s;
+        }
+        .form-group input:focus {
+            border-color: #3498db; 
+            outline: none; 
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        .password-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute; 
+            right: 15px; 
+            top: 42px; 
+            cursor: pointer; 
+            color: #777;
+            transition: all 0.3s;
+        }
+        .toggle-password:hover {
+            color: #3498db;
+        }
+        .login-button {
+            width: 100%; 
+            padding: 14px; 
+            background: linear-gradient(135deg, var(--blue-pastel), #8bc6e0);
+            color: var(--text-dark); 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 18px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .login-button:hover {
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .error-message {
+            color: var(--error); 
+            text-align: center; 
+            margin-top: 15px; 
+            font-weight: 600; 
+            display: none;
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        .footer {
+            text-align: center; 
+            margin-top: 30px; 
+            color: #777; 
+            font-size: 14px;
+        }
+        .date-display {
+            text-align: center; 
+            margin: 20px 0; 
+            font-size: 18px; 
+            font-weight: 600; 
+            color: #555; 
+            background-color: var(--light-gray); 
+            padding: 15px; 
+            border-radius: 15px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .digital-clock {
+            font-size: 32px; 
+            font-weight: 800; 
+            margin-top: 10px; 
+            background: linear-gradient(45deg, var(--blue-pastel), var(--green-pastel)); 
+            padding: 10px 20px; 
+            border-radius: 10px; 
+            color: var(--text-dark); 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            display: inline-block; 
+            font-family: 'Poppins', sans-serif;
+            animation: pulse 2s infinite;
+        }
+        .action-buttons {
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 15px; 
+            margin-bottom: 30px;
+        }
+        .action-button {
+            padding: 15px 20px; 
+            border-radius: 15px; 
+            border: none; 
+            font-size: 16px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px; 
+            transition: all 0.3s; 
+            font-family: 'Poppins', sans-serif; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            min-width: 200px;
+        }
+        .action-button:hover {
+            transform: translateY(-3px); 
+            box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+        }
+        .present-all {
+            background: linear-gradient(135deg, var(--green-pastel), #a0d9a0);
+        }
+        .submit-attendance {
+            background: linear-gradient(135deg, var(--blue-pastel), #8bc6e0);
+        }
+        .rekap-harian {
+            background: linear-gradient(135deg, var(--yellow-pastel), #f9d976);
+        }
+        .rekap-bulanan {
+            background: linear-gradient(135deg, var(--pink-pastel), #f8b3c4);
+        }
+        .students-grid {
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 15px;
+        }
+        @media (min-width: 576px) {.students-grid {grid-template-columns: repeat(3, 1fr);}}
+        @media (min-width: 768px) {.students-grid {grid-template-columns: repeat(4, 1fr);}}
+        @media (min-width: 992px) {.students-grid {grid-template-columns: repeat(5, 1fr);}}
+        @media (min-width: 1200px) {.students-grid {grid-template-columns: repeat(6, 1fr);}}
+        .student-card {
+            background-color: var(--light-gray); 
+            border-radius: 15px; 
+            padding: 15px; 
+            text-align: center; 
+            box-shadow: 0 4px 8px var(--shadow); 
+            transition: all 0.3s;
+            animation: popIn 0.4s ease-out;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .student-card:hover {
+            transform: translateY(-5px); 
+            box-shadow: 0 6px 12px var(--shadow);
+        }
+        .student-avatar {
+            width: 60px; 
+            height: 60px; 
+            border-radius: 50%; 
+            background: linear-gradient(135deg, var(--blue-pastel), var(--green-pastel)); 
+            margin: 0 auto 10px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-size: 24px; 
+            font-weight: 700; 
+            color: var(--text-dark);
+        }
+        .student-name {
+            font-size: 14px; 
+            font-weight: 600; 
+            margin-bottom: 10px; 
+            min-height: 40px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            display: -webkit-box; 
+            -webkit-line-clamp: 2; 
+            -webkit-box-orient: vertical;
+        }
+        .attendance-status {
+            width: 100%; 
+            padding: 8px; 
+            border-radius: 10px; 
+            border: 2px solid var(--blue-pastel); 
+            font-size: 14px; 
+            font-weight: 600; 
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .attendance-status:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        .success-message {
+            position: fixed; 
+            top: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background-color: var(--success); 
+            color: white; 
+            padding: 15px 30px; 
+            border-radius: 10px; 
+            font-weight: 700; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+            z-index: 1000; 
+            display: none;
+            animation: slideDown 0.5s ease-out;
+        }
+        @keyframes slideDown {
+            from { top: -50px; opacity: 0; }
+            to { top: 20px; opacity: 1; }
+        }
+        .logout-button {
+            position: absolute; 
+            top: 20px; 
+            right: 20px; 
+            background: transparent; 
+            border: none; 
+            font-size: 20px; 
+            color: #555; 
+            cursor: pointer; 
+            transition: all 0.3s;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logout-button:hover {
+            color: var(--error); 
+            transform: scale(1.1); 
+            background-color: rgba(0,0,0,0.05);
+        }
+        .date-picker-container {
+            display: flex; 
+            justify-content: center; 
+            margin: 15px 0; 
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .date-picker {
+            padding: 10px 15px; 
+            border: 2px solid var(--blue-pastel); 
+            border-radius: 10px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            text-align: center;
+            min-width: 200px;
+        }
+        /* Rekap modal */
+        .modal {
+            display:none;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100vw;
+            height:100vh;
+            background:rgba(0,0,0,0.2);
+            z-index:2000;
+            align-items:center;
+            justify-content:center;
+        }
+        .modal.active {
+            display:flex;
+            animation: fadeIn 0.3s;
+        }
+        .modal-content {
+            background:#fff;
+            padding:30px 20px;
+            border-radius:16px;
+            min-width:340px;
+            max-width:95vw;
+            max-height:90vh;
+            overflow:auto;
+            box-shadow:0 10px 30px var(--shadow); 
+            position: relative;
+        }
+        .modal-content h2 {
+            font-size:22px;
+            font-weight:800;
+            text-align:center;
+            margin-bottom:18px;
+            color: var(--text-dark);
+        }
+        .modal-content .close-modal {
+            position:absolute;
+            top:18px;
+            right:22px;
+            font-size:22px;
+            cursor:pointer;
+            color:#333;
+            transition: all 0.3s;
+        }
+        .modal-content .close-modal:hover {
+            color: var(--error);
+            transform: scale(1.1);
+        }
+        .rekap-table {
+            width:100%;
+            border-collapse:collapse;
+            margin-top:10px; 
+            font-size: 14px;
+        }
+        .rekap-table th, .rekap-table td {
+            border:1px solid #eee;
+            padding:7px;
+            text-align:center;
+        }
+        .rekap-table th {
+            background:#f9f9f9; 
+            position: sticky; 
+            top: 0;
+            font-weight: 700;
+        }
+        .rekap-controls {
+            margin-bottom:10px;
+            display:flex;
+            flex-wrap:wrap;
+            align-items:center;
+            gap:10px; 
+            justify-content: center;
+        }
+        .rekap-controls input, .rekap-controls select {
+            padding:6px 10px;
+            border-radius:8px;
+            border:1px solid #ddd;
+            font-family: 'Nunito', sans-serif;
+        }
+        .search-container {
+            margin: 10px 0; 
+            display: flex; 
+            gap: 10px;
+        }
+        .search-container input {
+            flex: 1; 
+            padding: 8px 12px; 
+            border-radius: 8px; 
+            border: 1px solid #ddd;
+            font-family: 'Nunito', sans-serif;
+        }
+        .status-hadir {background-color: rgba(46, 204, 113, 0.2);}
+        .status-izin {background-color: rgba(52, 152, 219, 0.2);}
+        .status-sakit {background-color: rgba(155, 89, 182, 0.2);}
+        .status-alfa {background-color: rgba(231, 76, 60, 0.2);}
+        .no-data {
+            text-align: center; 
+            padding: 20px; 
+            color: #777;
+            font-weight: 600;
+        }
+        .loading {
+            text-align: center; 
+            padding: 20px;
+            color: #555;
+        }
+        .loading i {
+            margin-right: 10px;
+        }
+        .info-tanggal {
+            font-size: 18px; 
+            font-weight: 600; 
+            margin-bottom: 10px; 
+            text-align: center;
+            background: var(--light-gray);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .app-title {
+            text-align: center;
+            margin: 10px 0 20px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            position: relative;
+        }
+        .app-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--blue-pastel), var(--green-pastel));
+            margin: 8px auto 0;
+            border-radius: 2px;
+        }
     </style>
 </head>
 <body>
-    <!-- HTML tetap sama seperti sebelumnya -->
+    <div class="app-container">
+        <!-- Login Page -->
+        <div id="login-page" class="slide-container active">
+            <div class="header">
+                <div class="logo"><i class="fas fa-school"></i></div>
+                <h1 class="school-name">SDN 1 PASIRPOGOR</h1>
+                <p class="subtitle">DAFTAR HADIR SISWA</p>
+            </div>
+            <form class="login-form" id="loginForm" autocomplete="off">
+                <div class="app-title">Login Guru</div>
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="username" required autocomplete="off">
+                </div>
+                <div class="form-group password-container">
+                    <label for="password"><i class="fas fa-key"></i> Password</label>
+                    <input type="password" id="password" required autocomplete="off">
+                    <i class="fas fa-eye-slash toggle-password" id="togglePasswordBtn" tabindex="0" aria-label="Tampilkan/sembunyikan password"></i>
+                </div>
+                <button type="submit" class="login-button">
+                    <i class="fas fa-lock"></i> Login
+                </button>
+                <div id="error-message" class="error-message">
+                    Username atau Password salah!
+                </div>
+            </form>
+            <div class="footer">© 2023 SDN 1 Pasirpogor - Sistem Absensi Digital</div>
+        </div>
+        
+        <!-- Home Page -->
+        <div id="home-page" class="slide-container">
+            <div class="header">
+                <button class="logout-button" id="logoutBtn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+                <div class="logo"><i class="fas fa-school"></i></div>
+                <h1 class="school-name">SDN 1 PASIRPOGOR</h1>
+                <p class="subtitle">DAFTAR HADIR SISWA</p>
+            </div>
+            
+            <div class="date-picker-container">
+                <input type="date" id="attendance-date" class="date-picker">
+                <button id="btnLoadAttendance" class="action-button submit-attendance">
+                    <i class="fas fa-calendar-day"></i> Muat Kehadiran
+                </button>
+            </div>
+            
+            <div class="info-tanggal">
+                <i class="fas fa-info-circle"></i> Input Data Kehadiran untuk: 
+                <span id="selected-date-display"></span>
+            </div>
+            
+            <div class="date-display">
+                <i class="fas fa-calendar-alt"></i> <span id="current-date"></span>
+                <div class="digital-clock" id="digital-clock">00:00:00</div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-button present-all" id="btnHadirSemua">
+                    <i class="fas fa-user-check"></i> Hadir Semua
+                </button>
+                <button class="action-button submit-attendance" id="btnKirimAbsen">
+                    <i class="fas fa-paper-plane"></i> Kirim Absen
+                </button>
+                <button class="action-button rekap-harian" id="btnRekapHarian">
+                    <i class="fas fa-calendar-day"></i> Rekap Harian
+                </button>
+                <button class="action-button rekap-bulanan" id="btnRekapBulanan">
+                    <i class="fas fa-calendar"></i> Rekap Bulanan
+                </button>
+            </div>
+            
+            <div class="students-grid" id="students-container"></div>
+        </div>
+        
+        <div id="success-message" class="success-message">
+            Data telah terkirim!
+        </div>
+        
+        <!-- Modal Rekap -->
+        <div class="modal" id="rekapModal">
+            <div class="modal-content" id="rekapModalContent">
+                <span class="close-modal" id="closeRekapModal">&times;</span>
+            </div>
+        </div>
+    </div>
     
     <script>
         // ================= KONFIGURASI SHEETDB =================
@@ -190,6 +777,8 @@
             
             try {
                 const res = await fetch(`${SHEETDB_URL}/search?Tanggal=${encodeURIComponent(formattedDate)}`);
+                if (!res.ok) throw new Error('Gagal memuat data');
+                
                 const data = await res.json();
                 attendanceData = {};
                 
@@ -220,7 +809,7 @@
                     attendanceData[student] = 'Alfa';
                 });
                 generateStudentCards();
-                document.getElementById('students-container').innerHTML += '<div class="no-data" style="color:#e74c3c;">Gagal memuat data absensi!</div>';
+                document.getElementById('students-container').innerHTML = '<div class="no-data" style="color:#e74c3c;">Gagal memuat data absensi! Silakan coba lagi.</div>';
             }
         }
 
@@ -295,6 +884,12 @@
             let sukses = 0, gagal = 0;
             
             try {
+                // Tampilkan loading
+                const btn = document.getElementById('btnKirimAbsen');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+                btn.disabled = true;
+                
                 // Coba kirim semua data sekaligus
                 const res = await fetch(SHEETDB_URL, {
                     method: "POST",
@@ -303,32 +898,13 @@
                 });
                 
                 if (res.ok) {
-                    sukses = students.length;
+                    const result = await res.json();
+                    sukses = result.created || students.length;
                 } else {
-                    // Jika gagal, coba kirim satu per satu
-                    for (const nama of students) {
-                        const data = {
-                            Tanggal: formattedDate,
-                            "Nama Siswa": nama,
-                            "Status Kehadiran": attendanceData[nama] || 'Alfa'
-                        };
-                        
-                        try {
-                            const resSingle = await fetch(SHEETDB_URL, {
-                                method: "POST",
-                                headers: {"Content-Type": "application/json"},
-                                body: JSON.stringify({ data })
-                            });
-                            
-                            if (resSingle.ok) sukses++; 
-                            else gagal++;
-                        } catch (e) {
-                            gagal++;
-                        }
-                    }
+                    throw new Error('Gagal mengirim data batch');
                 }
             } catch (e) {
-                // Jika error jaringan, coba kirim satu per satu
+                // Jika gagal, coba kirim satu per satu
                 for (const nama of students) {
                     const data = {
                         Tanggal: formattedDate,
@@ -343,12 +919,22 @@
                             body: JSON.stringify({ data })
                         });
                         
-                        if (resSingle.ok) sukses++; 
-                        else gagal++;
+                        if (resSingle.ok) {
+                            const result = await resSingle.json();
+                            if (result.created === 1) sukses++;
+                            else gagal++;
+                        } else {
+                            gagal++;
+                        }
                     } catch (e) {
                         gagal++;
                     }
                 }
+            } finally {
+                // Reset tombol
+                const btn = document.getElementById('btnKirimAbsen');
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Absen';
+                btn.disabled = false;
             }
             
             // Tampilkan pesan hasil
@@ -423,6 +1009,8 @@
             
             try {
                 const res = await fetch(`${SHEETDB_URL}/search?Tanggal=${encodeURIComponent(formattedDate)}`);
+                if (!res.ok) throw new Error('Gagal memuat data');
+                
                 const data = await res.json();
                 
                 if (!Array.isArray(data) || data.length === 0) {
@@ -535,6 +1123,8 @@
             
             try {
                 const res = await fetch(SHEETDB_URL);
+                if (!res.ok) throw new Error('Gagal memuat data');
+                
                 const allData = await res.json();
                 
                 if (!Array.isArray(allData) || allData.length === 0) {
@@ -545,8 +1135,13 @@
                 // Filter data berdasarkan bulan dan tahun
                 const filteredData = allData.filter(row => {
                     if (!row.Tanggal) return false;
-                    const [day, month, year] = row.Tanggal.split('-');
-                    return month === bulan && year === tahun;
+                    
+                    try {
+                        const [day, month, year] = row.Tanggal.split('-');
+                        return month === bulan && year === tahun;
+                    } catch {
+                        return false;
+                    }
                 });
                 
                 if (filteredData.length === 0) {
@@ -563,6 +1158,8 @@
                 for (let row of filteredData) {
                     const nama = row["Nama Siswa"];
                     const status = row["Status Kehadiran"];
+                    
+                    if (!nama) continue;
                     
                     if (!siswaMap[nama]) {
                         siswaMap[nama] = { Hadir: 0, Izin: 0, Sakit: 0, Alfa: 0 };
@@ -598,18 +1195,20 @@
                 `;
                 
                 let nomor = 1;
-                for (let nama in siswaMap) {
-                    const total = siswaMap[nama].Hadir + siswaMap[nama].Izin + 
-                                 siswaMap[nama].Sakit + siswaMap[nama].Alfa;
+                // Urutkan berdasarkan nama
+                const sortedNames = Object.keys(siswaMap).sort();
+                for (let nama of sortedNames) {
+                    const stat = siswaMap[nama];
+                    const total = stat.Hadir + stat.Izin + stat.Sakit + stat.Alfa;
                     
                     tableHTML += `
                         <tr>
                             <td>${nomor++}</td>
                             <td>${nama}</td>
-                            <td>${siswaMap[nama].Hadir}</td>
-                            <td>${siswaMap[nama].Izin}</td>
-                            <td>${siswaMap[nama].Sakit}</td>
-                            <td>${siswaMap[nama].Alfa}</td>
+                            <td>${stat.Hadir}</td>
+                            <td>${stat.Izin}</td>
+                            <td>${stat.Sakit}</td>
+                            <td>${stat.Alfa}</td>
                             <td><strong>${total}</strong></td>
                         </tr>
                     `;
@@ -671,53 +1270,28 @@
                 "Total": stat.Hadir + stat.Izin + stat.Sakit + stat.Alfa
             }));
             
+            const resultDiv = document.getElementById('rekapBulananResult');
+            resultDiv.innerHTML = "<div class='loading'><i class='fas fa-spinner fa-spin'></i> Menyimpan data rekap bulanan...</div>";
+            
             try {
-                // Tampilkan loading
-                const resultDiv = document.getElementById('rekapBulananResult');
-                resultDiv.innerHTML = "<div class='loading'><i class='fas fa-spinner fa-spin'></i> Menyimpan data rekap bulanan...</div>";
-                
                 const res = await fetch(SHEETDB_URL_REKAP_BULANAN, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({ data: dataArr })
                 });
                 
+                if (!res.ok) throw new Error('Gagal mengirim data');
+                
                 const result = await res.json();
                 
                 if (result.created && result.created > 0) {
                     alert(`✅ Berhasil menyimpan ${result.created} data rekap bulanan!`);
                 } else {
-                    throw new Error(result.error || "Gagal menyimpan data");
+                    throw new Error("Gagal menyimpan data");
                 }
             } catch (error) {
                 console.error("Error saat menyimpan rekap bulanan:", error);
-                
-                // Coba simpan satu per satu jika batch gagal
-                let sukses = 0;
-                const totalData = dataArr.length;
-                
-                for (const data of dataArr) {
-                    try {
-                        const res = await fetch(SHEETDB_URL_REKAP_BULANAN, {
-                            method: "POST",
-                            headers: {"Content-Type": "application/json"},
-                            body: JSON.stringify({ data: [data] })
-                        });
-                        
-                        const result = await res.json();
-                        if (result.created === 1) sukses++;
-                    } catch (e) {
-                        console.error(`Gagal menyimpan data ${data['Nama Siswa']}:`, e);
-                    }
-                }
-                
-                if (sukses === totalData) {
-                    alert("✅ Semua data rekap berhasil disimpan (satu per satu)");
-                } else if (sukses > 0) {
-                    alert(`⚠️ ${sukses}/${totalData} data rekap berhasil disimpan`);
-                } else {
-                    alert("❌ Gagal menyimpan semua data rekap");
-                }
+                alert(`❌ Gagal menyimpan rekap bulanan: ${error.message}`);
             }
             
             // Muat ulang rekap untuk menampilkan data terbaru
