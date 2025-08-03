@@ -16,11 +16,14 @@
             --light-gray: #f8f9fa;
             --text-dark: #333333;
             --shadow: rgba(0, 0, 0, 0.1);
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --warning: #f39c12;
         }
         * {margin: 0; padding: 0; box-sizing: border-box;}
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: var(--blue-pastel);
+            background: linear-gradient(135deg, #6dd5ed, #2193b0);
             color: var(--text-dark);
             min-height: 100vh;
             display: flex;
@@ -32,68 +35,480 @@
             width: 100%; max-width: 1200px; background-color: var(--white);
             border-radius: 20px; box-shadow: 0 10px 30px var(--shadow);
             overflow: hidden; position: relative; min-height: 85vh;
+            animation: fadeIn 0.8s ease-out;
         }
-        .header {background: linear-gradient(135deg, var(--blue-pastel), var(--green-pastel)); padding: 20px; text-align: center; position: relative;}
-        .logo {width: 100px; height: 100px; background-color: var(--yellow-pastel); border-radius: 50%; margin: 0 auto 15px; display: flex; justify-content: center; align-items: center; font-size: 40px; color: #f39c12; box-shadow: 0 4px 10px var(--shadow);}
-        .school-name {font-size: 28px; font-weight: 800; color: var(--text-dark); margin-bottom: 5px; letter-spacing: 0.5px;}
-        .subtitle {font-size: 18px; font-weight: 600; color: #555;}
-        .slide-container {display: none; padding: 20px; min-height: 65vh;}
-        .slide-container.active {display: block;}
-        .login-form {max-width: 400px; margin: 30px auto; padding: 30px; background-color: var(--light-gray); border-radius: 15px; box-shadow: 0 5px 15px var(--shadow);}
-        .form-group {margin-bottom: 20px; position: relative;}
-        .form-group label {display: block; margin-bottom: 8px; font-weight: 600; color: #555;}
-        .form-group input {width: 100%; padding: 12px 15px; border: 2px solid var(--blue-pastel); border-radius: 10px; font-size: 16px; transition: all 0.3s;}
-        .form-group input:focus {border-color: #3498db; outline: none; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);}
-        .password-container {position: relative;}
-        .toggle-password {position: absolute; right: 15px; top: 42px; cursor: pointer; color: #777;}
-        .login-button {width: 100%; padding: 14px; background-color: var(--blue-pastel); color: var(--text-dark); border: none; border-radius: 10px; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;}
-        .login-button:hover {background-color: #8bc6e0; transform: translateY(-2px);}
-        .error-message {color: #e74c3c; text-align: center; margin-top: 15px; font-weight: 600; display: none;}
-        .footer {text-align: center; margin-top: 30px; color: #777; font-size: 14px;}
-        .date-display {text-align: center; margin: 20px 0; font-size: 18px; font-weight: 600; color: #555; background-color: var(--light-gray); padding: 15px; border-radius: 15px; display: flex; flex-direction: column; align-items: center;}
-        .digital-clock {font-size: 32px; font-weight: 800; margin-top: 10px; background: linear-gradient(45deg, var(--blue-pastel), var(--green-pastel)); padding: 10px 20px; border-radius: 10px; color: var(--text-dark); box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: inline-block; font-family: 'Poppins', sans-serif;}
-        .action-buttons {display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 30px;}
-        .action-button {padding: 15px 20px; border-radius: 15px; border: none; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s; font-family: 'Poppins', sans-serif; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
-        .action-button:hover {transform: translateY(-3px); box-shadow: 0 6px 10px rgba(0,0,0,0.15);}
-        .present-all {background-color: var(--green-pastel);}
-        .submit-attendance {background-color: var(--blue-pastel);}
-        .rekap-harian {background-color: var(--yellow-pastel);}
-        .rekap-bulanan {background-color: var(--pink-pastel);}
-        .students-grid {display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .header {
+            background: linear-gradient(135deg, var(--blue-pastel), var(--green-pastel)); 
+            padding: 20px; 
+            text-align: center; 
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .logo {
+            width: 100px; height: 100px; 
+            background: linear-gradient(135deg, #fde8a0, #f9c5d1);
+            border-radius: 50%; 
+            margin: 0 auto 15px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-size: 40px; 
+            color: #e67e22; 
+            box-shadow: 0 4px 10px var(--shadow);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .school-name {
+            font-size: 28px; 
+            font-weight: 800; 
+            color: var(--text-dark); 
+            margin-bottom: 5px; 
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .subtitle {
+            font-size: 18px; 
+            font-weight: 600; 
+            color: #555;
+        }
+        .slide-container {
+            display: none; 
+            padding: 20px; 
+            min-height: 65vh;
+        }
+        .slide-container.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .login-form {
+            max-width: 400px; 
+            margin: 30px auto; 
+            padding: 30px; 
+            background-color: var(--light-gray); 
+            border-radius: 15px; 
+            box-shadow: 0 5px 15px var(--shadow);
+            animation: scaleIn 0.6s ease-out;
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .form-group {
+            margin-bottom: 20px; 
+            position: relative;
+        }
+        .form-group label {
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            color: #555;
+        }
+        .form-group input {
+            width: 100%; 
+            padding: 12px 15px; 
+            border: 2px solid var(--blue-pastel); 
+            border-radius: 10px; 
+            font-size: 16px; 
+            transition: all 0.3s;
+        }
+        .form-group input:focus {
+            border-color: #3498db; 
+            outline: none; 
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        .password-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute; 
+            right: 15px; 
+            top: 42px; 
+            cursor: pointer; 
+            color: #777;
+            transition: all 0.3s;
+        }
+        .toggle-password:hover {
+            color: #3498db;
+        }
+        .login-button {
+            width: 100%; 
+            padding: 14px; 
+            background: linear-gradient(135deg, var(--blue-pastel), #8bc6e0);
+            color: var(--text-dark); 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 18px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .login-button:hover {
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .error-message {
+            color: var(--error); 
+            text-align: center; 
+            margin-top: 15px; 
+            font-weight: 600; 
+            display: none;
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        .footer {
+            text-align: center; 
+            margin-top: 30px; 
+            color: #777; 
+            font-size: 14px;
+        }
+        .date-display {
+            text-align: center; 
+            margin: 20px 0; 
+            font-size: 18px; 
+            font-weight: 600; 
+            color: #555; 
+            background-color: var(--light-gray); 
+            padding: 15px; 
+            border-radius: 15px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .digital-clock {
+            font-size: 32px; 
+            font-weight: 800; 
+            margin-top: 10px; 
+            background: linear-gradient(45deg, var(--blue-pastel), var(--green-pastel)); 
+            padding: 10px 20px; 
+            border-radius: 10px; 
+            color: var(--text-dark); 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            display: inline-block; 
+            font-family: 'Poppins', sans-serif;
+            animation: pulse 2s infinite;
+        }
+        .action-buttons {
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 15px; 
+            margin-bottom: 30px;
+        }
+        .action-button {
+            padding: 15px 20px; 
+            border-radius: 15px; 
+            border: none; 
+            font-size: 16px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px; 
+            transition: all 0.3s; 
+            font-family: 'Poppins', sans-serif; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            min-width: 200px;
+        }
+        .action-button:hover {
+            transform: translateY(-3px); 
+            box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+        }
+        .present-all {
+            background: linear-gradient(135deg, var(--green-pastel), #a0d9a0);
+        }
+        .submit-attendance {
+            background: linear-gradient(135deg, var(--blue-pastel), #8bc6e0);
+        }
+        .rekap-harian {
+            background: linear-gradient(135deg, var(--yellow-pastel), #f9d976);
+        }
+        .rekap-bulanan {
+            background: linear-gradient(135deg, var(--pink-pastel), #f8b3c4);
+        }
+        .students-grid {
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 15px;
+        }
         @media (min-width: 576px) {.students-grid {grid-template-columns: repeat(3, 1fr);}}
         @media (min-width: 768px) {.students-grid {grid-template-columns: repeat(4, 1fr);}}
         @media (min-width: 992px) {.students-grid {grid-template-columns: repeat(5, 1fr);}}
         @media (min-width: 1200px) {.students-grid {grid-template-columns: repeat(6, 1fr);}}
-        .student-card {background-color: var(--light-gray); border-radius: 15px; padding: 15px; text-align: center; box-shadow: 0 4px 8px var(--shadow); transition: all 0.3s;}
-        .student-card:hover {transform: translateY(-5px); box-shadow: 0 6px 12px var(--shadow);}
-        .student-avatar {width: 60px; height: 60px; border-radius: 50%; background-color: var(--blue-pastel); margin: 0 auto 10px; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: 700; color: var(--text-dark);}
-        .student-name {font-size: 14px; font-weight: 600; margin-bottom: 10px; min-height: 40px; display: flex; align-items: center; justify-content: center; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
-        .attendance-status {width: 100%; padding: 8px; border-radius: 10px; border: 2px solid var(--blue-pastel); font-size: 14px; font-weight: 600; cursor: pointer;}
-        .success-message {position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #2ecc71; color: white; padding: 15px 30px; border-radius: 10px; font-weight: 700; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); z-index: 1000; display: none;}
-        .logout-button {position: absolute; top: 20px; right: 20px; background: transparent; border: none; font-size: 20px; color: #555; cursor: pointer; transition: all 0.3s;}
-        .logout-button:hover {color: #e74c3c; transform: scale(1.1);}
-        .date-picker-container {display: flex; justify-content: center; margin: 15px 0; gap: 10px;}
-        .date-picker {padding: 10px 15px; border: 2px solid var(--blue-pastel); border-radius: 10px; font-size: 16px; font-weight: 600; text-align: center;}
+        .student-card {
+            background-color: var(--light-gray); 
+            border-radius: 15px; 
+            padding: 15px; 
+            text-align: center; 
+            box-shadow: 0 4px 8px var(--shadow); 
+            transition: all 0.3s;
+            animation: popIn 0.4s ease-out;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .student-card:hover {
+            transform: translateY(-5px); 
+            box-shadow: 0 6px 12px var(--shadow);
+        }
+        .student-avatar {
+            width: 60px; 
+            height: 60px; 
+            border-radius: 50%; 
+            background: linear-gradient(135deg, var(--blue-pastel), var(--green-pastel)); 
+            margin: 0 auto 10px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-size: 24px; 
+            font-weight: 700; 
+            color: var(--text-dark);
+        }
+        .student-name {
+            font-size: 14px; 
+            font-weight: 600; 
+            margin-bottom: 10px; 
+            min-height: 40px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            display: -webkit-box; 
+            -webkit-line-clamp: 2; 
+            -webkit-box-orient: vertical;
+        }
+        .attendance-status {
+            width: 100%; 
+            padding: 8px; 
+            border-radius: 10px; 
+            border: 2px solid var(--blue-pastel); 
+            font-size: 14px; 
+            font-weight: 600; 
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .attendance-status:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        .success-message {
+            position: fixed; 
+            top: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background-color: var(--success); 
+            color: white; 
+            padding: 15px 30px; 
+            border-radius: 10px; 
+            font-weight: 700; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+            z-index: 1000; 
+            display: none;
+            animation: slideDown 0.5s ease-out;
+        }
+        @keyframes slideDown {
+            from { top: -50px; opacity: 0; }
+            to { top: 20px; opacity: 1; }
+        }
+        .logout-button {
+            position: absolute; 
+            top: 20px; 
+            right: 20px; 
+            background: transparent; 
+            border: none; 
+            font-size: 20px; 
+            color: #555; 
+            cursor: pointer; 
+            transition: all 0.3s;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logout-button:hover {
+            color: var(--error); 
+            transform: scale(1.1); 
+            background-color: rgba(0,0,0,0.05);
+        }
+        .date-picker-container {
+            display: flex; 
+            justify-content: center; 
+            margin: 15px 0; 
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .date-picker {
+            padding: 10px 15px; 
+            border: 2px solid var(--blue-pastel); 
+            border-radius: 10px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            text-align: center;
+            min-width: 200px;
+        }
         /* Rekap modal */
-        .modal {display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.2);z-index:2000;align-items:center;justify-content:center;}
-        .modal.active {display:flex;}
-        .modal-content {background:#fff;padding:30px 20px;border-radius:16px;min-width:340px;max-width:95vw;max-height:90vh;overflow:auto;box-shadow:0 10px 30px var(--shadow); position: relative;}
-        .modal-content h2 {font-size:22px;font-weight:800;text-align:center;margin-bottom:18px;}
-        .modal-content .close-modal {position:absolute;top:18px;right:22px;font-size:22px;cursor:pointer;color:#333;}
-        .rekap-table {width:100%;border-collapse:collapse;margin-top:10px; font-size: 14px;}
-        .rekap-table th, .rekap-table td {border:1px solid #eee;padding:7px;text-align:left;}
-        .rekap-table th {background:#f9f9f9; position: sticky; top: 0;}
-        .rekap-controls {margin-bottom:10px;display:flex;flex-wrap:wrap;align-items:center;gap:10px; justify-content: center;}
-        .rekap-controls input, .rekap-controls select {padding:6px 10px;border-radius:8px;border:1px solid #ddd;}
-        .search-container {margin: 10px 0; display: flex; gap: 10px;}
-        .search-container input {flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid #ddd;}
+        .modal {
+            display:none;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100vw;
+            height:100vh;
+            background:rgba(0,0,0,0.2);
+            z-index:2000;
+            align-items:center;
+            justify-content:center;
+        }
+        .modal.active {
+            display:flex;
+            animation: fadeIn 0.3s;
+        }
+        .modal-content {
+            background:#fff;
+            padding:30px 20px;
+            border-radius:16px;
+            min-width:340px;
+            max-width:95vw;
+            max-height:90vh;
+            overflow:auto;
+            box-shadow:0 10px 30px var(--shadow); 
+            position: relative;
+        }
+        .modal-content h2 {
+            font-size:22px;
+            font-weight:800;
+            text-align:center;
+            margin-bottom:18px;
+            color: var(--text-dark);
+        }
+        .modal-content .close-modal {
+            position:absolute;
+            top:18px;
+            right:22px;
+            font-size:22px;
+            cursor:pointer;
+            color:#333;
+            transition: all 0.3s;
+        }
+        .modal-content .close-modal:hover {
+            color: var(--error);
+            transform: scale(1.1);
+        }
+        .rekap-table {
+            width:100%;
+            border-collapse:collapse;
+            margin-top:10px; 
+            font-size: 14px;
+        }
+        .rekap-table th, .rekap-table td {
+            border:1px solid #eee;
+            padding:7px;
+            text-align:center;
+        }
+        .rekap-table th {
+            background:#f9f9f9; 
+            position: sticky; 
+            top: 0;
+            font-weight: 700;
+        }
+        .rekap-controls {
+            margin-bottom:10px;
+            display:flex;
+            flex-wrap:wrap;
+            align-items:center;
+            gap:10px; 
+            justify-content: center;
+        }
+        .rekap-controls input, .rekap-controls select {
+            padding:6px 10px;
+            border-radius:8px;
+            border:1px solid #ddd;
+            font-family: 'Nunito', sans-serif;
+        }
+        .search-container {
+            margin: 10px 0; 
+            display: flex; 
+            gap: 10px;
+        }
+        .search-container input {
+            flex: 1; 
+            padding: 8px 12px; 
+            border-radius: 8px; 
+            border: 1px solid #ddd;
+            font-family: 'Nunito', sans-serif;
+        }
         .status-hadir {background-color: rgba(46, 204, 113, 0.2);}
         .status-izin {background-color: rgba(52, 152, 219, 0.2);}
         .status-sakit {background-color: rgba(155, 89, 182, 0.2);}
         .status-alfa {background-color: rgba(231, 76, 60, 0.2);}
-        .no-data {text-align: center; padding: 20px; color: #777;}
-        .loading {text-align: center; padding: 20px;}
-        .info-tanggal {font-size: 18px; font-weight: 600; margin-bottom: 10px; text-align: center;}
+        .no-data {
+            text-align: center; 
+            padding: 20px; 
+            color: #777;
+            font-weight: 600;
+        }
+        .loading {
+            text-align: center; 
+            padding: 20px;
+            color: #555;
+        }
+        .loading i {
+            margin-right: 10px;
+        }
+        .info-tanggal {
+            font-size: 18px; 
+            font-weight: 600; 
+            margin-bottom: 10px; 
+            text-align: center;
+            background: var(--light-gray);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .app-title {
+            text-align: center;
+            margin: 10px 0 20px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            position: relative;
+        }
+        .app-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--blue-pastel), var(--green-pastel));
+            margin: 8px auto 0;
+            border-radius: 2px;
+        }
     </style>
 </head>
 <body>
@@ -106,12 +521,13 @@
                 <p class="subtitle">DAFTAR HADIR SISWA</p>
             </div>
             <form class="login-form" id="loginForm" autocomplete="off">
+                <div class="app-title">Login Guru</div>
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="username"><i class="fas fa-user"></i> Username</label>
                     <input type="text" id="username" required autocomplete="off">
                 </div>
                 <div class="form-group password-container">
-                    <label for="password">Password</label>
+                    <label for="password"><i class="fas fa-key"></i> Password</label>
                     <input type="password" id="password" required autocomplete="off">
                     <i class="fas fa-eye-slash toggle-password" id="togglePasswordBtn" tabindex="0" aria-label="Tampilkan/sembunyikan password"></i>
                 </div>
@@ -122,8 +538,9 @@
                     Username atau Password salah!
                 </div>
             </form>
-            <div class="footer">© SDN 1 Pasirpogor</div>
+            <div class="footer">© 2023 SDN 1 Pasirpogor - Sistem Absensi Digital</div>
         </div>
+        
         <!-- Home Page -->
         <div id="home-page" class="slide-container">
             <div class="header">
@@ -143,7 +560,7 @@
             </div>
             
             <div class="info-tanggal">
-                Input Data Kehadiran untuk: 
+                <i class="fas fa-info-circle"></i> Input Data Kehadiran untuk: 
                 <span id="selected-date-display"></span>
             </div>
             
@@ -169,9 +586,11 @@
             
             <div class="students-grid" id="students-container"></div>
         </div>
+        
         <div id="success-message" class="success-message">
             Data telah terkirim!
         </div>
+        
         <!-- Modal Rekap -->
         <div class="modal" id="rekapModal">
             <div class="modal-content" id="rekapModalContent">
@@ -179,11 +598,12 @@
             </div>
         </div>
     </div>
+    
     <script>
         // ================= KONFIGURASI SHEETDB =================
         const SHEETDB_URL = "https://sheetdb.io/api/v1/5050u4yo2zvvn";
-        const SHEETDB_URL_REKAP_BULANAN = `${SHEETDB_URL}?sheet=RekapBulanan`; // Ganti jika nama sheet berbeda
-
+        const SHEETDB_URL_REKAP_BULANAN = `${SHEETDB_URL}/sheets/RekapBulanan`;
+        
         // ================= DAFTAR SISWA =================
         const defaultStudents = [
             "AIRA ALFANISA", "ALVARO ABU RIZIQ", "AZAHRA MIKAILA PUTRI", "DAFFA SYADID AL GHIFARI", "DAVITA SHEILA NURASYIFA",
@@ -204,6 +624,7 @@
         let attendanceData = {};
         let students = [...defaultStudents];
         let selectedDate = new Date();
+        let searchTimeout;
 
         // ================= FUNGSI UTAMA =================
         document.addEventListener('DOMContentLoaded', function() {
@@ -433,6 +854,15 @@
         }
 
         function markAllPresent() {
+            const btn = document.getElementById('btnHadirSemua');
+            btn.innerHTML = '<i class="fas fa-check"></i> Berhasil!';
+            btn.style.backgroundColor = '#2ecc71';
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-user-check"></i> Hadir Semua';
+                btn.style.backgroundColor = '';
+            }, 2000);
+            
             students.forEach(student => {
                 attendanceData[student] = 'Hadir';
             });
@@ -510,10 +940,13 @@
             // Tampilkan pesan hasil
             if (sukses > 0 && gagal === 0) {
                 message.textContent = 'Semua absensi berhasil dikirim!';
+                message.style.backgroundColor = '#2ecc71';
             } else if (sukses > 0) {
                 message.textContent = `Sebagian absensi berhasil (${sukses}), gagal (${gagal}).`;
+                message.style.backgroundColor = '#f39c12';
             } else {
                 message.textContent = 'Gagal kirim absensi!';
+                message.style.backgroundColor = '#e74c3c';
             }
             
             message.style.display = 'block';
@@ -566,6 +999,12 @@
         async function loadRekapHarian(date) {
             const formattedDate = formatDate(date);
             const resultDiv = document.getElementById('rekapHarianResult');
+            
+            if (isNaN(date.getTime())) {
+                resultDiv.innerHTML = `<div class="no-data">Tanggal tidak valid!</div>`;
+                return;
+            }
+            
             resultDiv.innerHTML = "<div class='loading'><i class='fas fa-spinner fa-spin'></i> Memuat data...</div>";
             
             try {
@@ -587,6 +1026,7 @@
                     <table class="rekap-table">
                         <thead>
                             <tr>
+                                <th>No</th>
                                 <th>Nama Siswa</th>
                                 <th>Status Kehadiran</th>
                             </tr>
@@ -594,10 +1034,12 @@
                         <tbody>
                 `;
                 
+                let nomor = 1;
                 for (let row of data) {
                     const statusClass = `status-${row["Status Kehadiran"]?.toLowerCase() || ''}`;
                     tableHTML += `
                         <tr class="${statusClass}">
+                            <td>${nomor++}</td>
                             <td>${row["Nama Siswa"] || "-"}</td>
                             <td>${row["Status Kehadiran"] || "-"}</td>
                         </tr>
@@ -607,15 +1049,18 @@
                 tableHTML += `</tbody></table>`;
                 resultDiv.innerHTML = searchHTML + tableHTML;
                 
-                // Fungsi pencarian
+                // Fungsi pencarian dengan debounce
                 document.getElementById('searchRekapHarian').addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    const rows = document.querySelectorAll('.rekap-table tbody tr');
-                    
-                    rows.forEach(row => {
-                        const name = row.cells[0].textContent.toLowerCase();
-                        row.style.display = name.includes(searchTerm) ? '' : 'none';
-                    });
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        const searchTerm = this.value.toLowerCase();
+                        const rows = document.querySelectorAll('.rekap-table tbody tr');
+                        
+                        rows.forEach(row => {
+                            const name = row.cells[1].textContent.toLowerCase();
+                            row.style.display = name.includes(searchTerm) ? '' : 'none';
+                        });
+                    }, 300);
                 });
             } catch(e) {
                 resultDiv.innerHTML = `
@@ -726,6 +1171,7 @@
                     <table class="rekap-table">
                         <thead>
                             <tr>
+                                <th>No</th>
                                 <th>Nama Siswa</th>
                                 <th>Hadir</th>
                                 <th>Izin</th>
@@ -737,12 +1183,14 @@
                         <tbody>
                 `;
                 
+                let nomor = 1;
                 for (let nama in siswaMap) {
                     const total = siswaMap[nama].Hadir + siswaMap[nama].Izin + 
                                  siswaMap[nama].Sakit + siswaMap[nama].Alfa;
                     
                     tableHTML += `
                         <tr>
+                            <td>${nomor++}</td>
                             <td>${nama}</td>
                             <td>${siswaMap[nama].Hadir}</td>
                             <td>${siswaMap[nama].Izin}</td>
@@ -764,15 +1212,18 @@
                 
                 resultDiv.innerHTML = searchHTML + tableHTML + simpanBtnHTML;
                 
-                // Fungsi pencarian
+                // Fungsi pencarian dengan debounce
                 document.getElementById('searchRekapBulanan').addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    const rows = document.querySelectorAll('.rekap-table tbody tr');
-                    
-                    rows.forEach(row => {
-                        const name = row.cells[0].textContent.toLowerCase();
-                        row.style.display = name.includes(searchTerm) ? '' : 'none';
-                    });
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        const searchTerm = this.value.toLowerCase();
+                        const rows = document.querySelectorAll('.rekap-table tbody tr');
+                        
+                        rows.forEach(row => {
+                            const name = row.cells[1].textContent.toLowerCase();
+                            row.style.display = name.includes(searchTerm) ? '' : 'none';
+                        });
+                    }, 300);
                 });
 
                 // Handler tombol simpan rekap
@@ -809,8 +1260,6 @@
             }));
             
             try {
-                console.log("Mengirim data rekap bulanan:", dataArr);
-                
                 const res = await fetch(SHEETDB_URL_REKAP_BULANAN, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
@@ -818,18 +1267,16 @@
                 });
                 
                 const result = await res.json();
-                console.log("Response SheetDB:", result);
                 
                 if (result.created && result.created > 0) {
                     alert(`✅ Berhasil menyimpan ${result.created} data rekap bulanan!`);
                 } else {
-                    const errorMsg = result.error || result.message || "Gagal tanpa pesan error";
-                    throw new Error(errorMsg);
+                    throw new Error(result.error || "Gagal tanpa pesan error");
                 }
             } catch (error) {
                 console.error("Error saat menyimpan rekap bulanan:", error);
                 
-                // Coba simpan satu per satu jika batch gagal
+                // Coba simpan satu per satu
                 let sukses = 0;
                 const totalData = dataArr.length;
                 
@@ -838,13 +1285,13 @@
                         const res = await fetch(SHEETDB_URL_REKAP_BULANAN, {
                             method: "POST",
                             headers: {"Content-Type": "application/json"},
-                            body: JSON.stringify({ data: [data] }) // Kirim satu per satu
+                            body: JSON.stringify({ data: [data] })
                         });
                         
                         const result = await res.json();
-                        if (result.created === 1) sukses++;
+                        if (result.created === 1) sukses++; 
                     } catch (e) {
-                        console.error(`Gagal menyimpan data ${data.Nama Siswa}:`, e);
+                        console.error(`Gagal menyimpan data ${data['Nama Siswa']}:`, e);
                     }
                 }
                 
