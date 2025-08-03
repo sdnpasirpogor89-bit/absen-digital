@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absen Digital - SDN 1 Pasirpogor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-pastel: #a0d2eb;
+            --yellow-pastel: #fde8a0;
+            --green-pastel: #c1e1c1;
+            --pink-pastel: #f9c5d1;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-dark: #333333;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+        * {margin: 0; padding: 0; box-sizing: border-box;}
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--blue-pastel);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .app-container {
+            width: 100%; max-width: 1200px; background-color: var(--white);
+            border-radius: 20px; box-shadow: 0 10px 30px var(--shadow);
+            overflow: hidden; position: relative; min-height: 85vh;
+        }
+        .header {background: linear-gradient(135deg, var(--blue-pastel), var(--green-pastel)); padding: 20px; text-align: center; position: relative;}
+        .logo {width: 100px; height: 100px; background-color: var(--yellow-pastel); border-radius: 50%; margin: 0 auto 15px; display: flex; justify-content: center; align-items: center; font-size: 40px; color: #f39c12; box-shadow: 0 4px 10px var(--shadow);}
+        .school-name {font-size: 28px; font-weight: 800; color: var(--text-dark); margin-bottom: 5px; letter-spacing: 0.5px;}
+        .subtitle {font-size: 18px; font-weight: 600; color: #555;}
+        .slide-container {display: none; padding: 20px; min-height: 65vh;}
+        .slide-container.active {display: block;}
+        .login-form {max-width: 400px; margin: 30px auto; padding: 30px; background-color: var(--light-gray); border-radius: 15px; box-shadow: 0 5px 15px var(--shadow);}
+        .form-group {margin-bottom: 20px; position: relative;}
+        .form-group label {display: block; margin-bottom: 8px; font-weight: 600; color: #555;}
+        .form-group input {width: 100%; padding: 12px 15px; border: 2px solid var(--blue-pastel); border-radius: 10px; font-size: 16px; transition: all 0.3s;}
+        .form-group input:focus {border-color: #3498db; outline: none; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);}
+        .password-container {position: relative;}
+        .toggle-password {position: absolute; right: 15px; top: 42px; cursor: pointer; color: #777;}
+        .login-button {width: 100%; padding: 14px; background-color: var(--blue-pastel); color: var(--text-dark); border: none; border-radius: 10px; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;}
+        .login-button:hover {background-color: #8bc6e0; transform: translateY(-2px);}
+        .error-message {color: #e74c3c; text-align: center; margin-top: 15px; font-weight: 600; display: none;}
+        .footer {text-align: center; margin-top: 30px; color: #777; font-size: 14px;}
+        .date-display {text-align: center; margin: 20px 0; font-size: 18px; font-weight: 600; color: #555; background-color: var(--light-gray); padding: 15px; border-radius: 15px; display: flex; flex-direction: column; align-items: center;}
+        .digital-clock {font-size: 32px; font-weight: 800; margin-top: 10px; background: linear-gradient(45deg, var(--blue-pastel), var(--green-pastel)); padding: 10px 20px; border-radius: 10px; color: var(--text-dark); box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: inline-block; font-family: 'Poppins', sans-serif;}
+        .action-buttons {display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 30px;}
+        .action-button {padding: 15px 20px; border-radius: 15px; border: none; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s; font-family: 'Poppins', sans-serif; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
+        .action-button:hover {transform: translateY(-3px); box-shadow: 0 6px 10px rgba(0,0,0,0.15);}
+        .present-all {background-color: var(--green-pastel);}
+        .submit-attendance {background-color: var(--blue-pastel);}
+        .rekap-harian {background-color: var(--yellow-pastel);}
+        .rekap-bulanan {background-color: var(--pink-pastel);}
+        .students-grid {display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;}
+        @media (min-width: 576px) {.students-grid {grid-template-columns: repeat(3, 1fr);}}
+        @media (min-width: 768px) {.students-grid {grid-template-columns: repeat(4, 1fr);}}
+        @media (min-width: 992px) {.students-grid {grid-template-columns: repeat(5, 1fr);}}
+        @media (min-width: 1200px) {.students-grid {grid-template-columns: repeat(6, 1fr);}}
+        .student-card {background-color: var(--light-gray); border-radius: 15px; padding: 15px; text-align: center; box-shadow: 0 4px 8px var(--shadow); transition: all 0.3s;}
+        .student-card:hover {transform: translateY(-5px); box-shadow: 0 6px 12px var(--shadow);}
+        .student-avatar {width: 60px; height: 60px; border-radius: 50%; background-color: var(--blue-pastel); margin: 0 auto 10px; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: 700; color: var(--text-dark);}
+        .student-name {font-size: 14px; font-weight: 600; margin-bottom: 10px; min-height: 40px; display: flex; align-items: center; justify-content: center; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
+        .attendance-status {width: 100%; padding: 8px; border-radius: 10px; border: 2px solid var(--blue-pastel); font-size: 14px; font-weight: 600; cursor: pointer;}
+        .success-message {position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #2ecc71; color: white; padding: 15px 30px; border-radius: 10px; font-weight: 700; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); z-index: 1000; display: none;}
+        .logout-button {position: absolute; top: 20px; right: 20px; background: transparent; border: none; font-size: 20px; color: #555; cursor: pointer; transition: all 0.3s;}
+        .logout-button:hover {color: #e74c3c; transform: scale(1.1);}
+        .date-picker-container {display: flex; justify-content: center; margin: 15px 0; gap: 10px;}
+        .date-picker {padding: 10px 15px; border: 2px solid var(--blue-pastel); border-radius: 10px; font-size: 16px; font-weight: 600; text-align: center;}
+        /* Rekap modal */
+        .modal {display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.2);z-index:2000;align-items:center;justify-content:center;}
+        .modal.active {display:flex;}
+        .modal-content {background:#fff;padding:30px 20px;border-radius:16px;min-width:340px;max-width:95vw;max-height:90vh;overflow:auto;box-shadow:0 10px 30px var(--shadow); position: relative;}
+        .modal-content h2 {font-size:22px;font-weight:800;text-align:center;margin-bottom:18px;}
+        .modal-content .close-modal {position:absolute;top:18px;right:22px;font-size:22px;cursor:pointer;color:#333;}
+        .rekap-table {width:100%;border-collapse:collapse;margin-top:10px; font-size: 14px;}
+        .rekap-table th, .rekap-table td {border:1px solid #eee;padding:7px;text-align:left;}
+        .rekap-table th {background:#f9f9f9; position: sticky; top: 0;}
+        .rekap-controls {margin-bottom:10px;display:flex;flex-wrap:wrap;align-items:center;gap:10px; justify-content: center;}
+        .rekap-controls input, .rekap-controls select {padding:6px 10px;border-radius:8px;border:1px solid #ddd;}
+        .search-container {margin: 10px 0; display: flex; gap: 10px;}
+        .search-container input {flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid #ddd;}
+        .status-hadir {background-color: rgba(46, 204, 113, 0.2);}
+        .status-izin {background-color: rgba(52, 152, 219, 0.2);}
+        .status-sakit {background-color: rgba(155, 89, 182, 0.2);}
+        .status-alfa {background-color: rgba(231, 76, 60, 0.2);}
+        .no-data {text-align: center; padding: 20px; color: #777;}
+        .loading {text-align: center; padding: 20px;}
+        .info-tanggal {font-size: 18px; font-weight: 600; margin-bottom: 10px; text-align: center;}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Login Page -->
+        <div id="login-page" class="slide-container active">
+            <div class="header">
+                <div class="logo"><i class="fas fa-school"></i></div>
+                <h1 class="school-name">SDN 1 PASIRPOGOR</h1>
+                <p class="subtitle">DAFTAR HADIR SISWA</p>
+            </div>
+            <form class="login-form" id="loginForm" autocomplete="off">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required autocomplete="off">
+                </div>
+                <div class="form-group password-container">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required autocomplete="off">
+                    <i class="fas fa-eye-slash toggle-password" id="togglePasswordBtn" tabindex="0" aria-label="Tampilkan/sembunyikan password"></i>
+                </div>
+                <button type="submit" class="login-button">
+                    <i class="fas fa-lock"></i> Login
+                </button>
+                <div id="error-message" class="error-message">
+                    Username atau Password salah!
+                </div>
+            </form>
+            <div class="footer">© SDN 1 Pasirpogor</div>
+        </div>
+        <!-- Home Page -->
+        <div id="home-page" class="slide-container">
+            <div class="header">
+                <button class="logout-button" id="logoutBtn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+                <div class="logo"><i class="fas fa-school"></i></div>
+                <h1 class="school-name">SDN 1 PASIRPOGOR</h1>
+                <p class="subtitle">DAFTAR HADIR SISWA</p>
+            </div>
+            
+            <div class="date-picker-container">
+                <input type="date" id="attendance-date" class="date-picker">
+                <button id="btnLoadAttendance" class="action-button submit-attendance">
+                    <i class="fas fa-calendar-day"></i> Muat Kehadiran
+                </button>
+            </div>
+            
+            <div class="info-tanggal">
+                Input Data Kehadiran untuk: 
+                <span id="selected-date-display"></span>
+            </div>
+            
+            <div class="date-display">
+                <i class="fas fa-calendar-alt"></i> <span id="current-date"></span>
+                <div class="digital-clock" id="digital-clock">00:00:00</div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-button present-all" id="btnHadirSemua">
+                    <i class="fas fa-user-check"></i> Hadir Semua
+                </button>
+                <button class="action-button submit-attendance" id="btnKirimAbsen">
+                    <i class="fas fa-paper-plane"></i> Kirim Absen
+                </button>
+                <button class="action-button rekap-harian" id="btnRekapHarian">
+                    <i class="fas fa-calendar-day"></i> Rekap Harian
+                </button>
+                <button class="action-button rekap-bulanan" id="btnRekapBulanan">
+                    <i class="fas fa-calendar"></i> Rekap Bulanan
+                </button>
+            </div>
+            
+            <div class="students-grid" id="students-container"></div>
+        </div>
+        <div id="success-message" class="success-message">
+            Data telah terkirim!
+        </div>
+        <!-- Modal Rekap -->
+        <div class="modal" id="rekapModal">
+            <div class="modal-content" id="rekapModalContent">
+                <span class="close-modal" id="closeRekapModal">&times;</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        // ================= KONFIGURASI SHEETDB =================
+        const SHEETDB_URL = "https://sheetdb.io/api/v1/5050u4yo2zvvn";
+        const SHEETDB_URL_REKAP_BULANAN = `${SHEETDB_URL}?sheet=RekapBulanan`; // Ganti jika nama sheet berbeda
+
+        // ================= DAFTAR SISWA =================
+        const defaultStudents = [
+            "AIRA ALFANISA", "ALVARO ABU RIZIQ", "AZAHRA MIKAILA PUTRI", "DAFFA SYADID AL GHIFARI", "DAVITA SHEILA NURASYIFA",
+            "DIMAS SAID HAIDIR", "DZAKIRA ASSYABIYA RAFIFA", "HAYISAM NUGRAHA", "HILMA SYAKILA RAHMADANI", "KIRANA PUTRI SOFYAN",
+            "MEZZA RIZKI MUNANDAR", "MUHAMAD IQBAL RACHMADENI", "MUHAMAD JUNA", "MUHAMAD RIZQI KURNIAWAN", "MUHAMAD SYAHDAN",
+            "MUHAMAD WILDAN RAMDANI", "MUHAMMAD AFANDI RAHMAN", "MUHAMMAD SAHDAN ALMUHAIMIN", "NADILA AINA ZAHRA",
+            "NAUFAL FADIL PRATAMA", "NAYLA PUTRI LUTHPIANA", "RAHAP", "SAHLA YUSHIRA ALMAHA", "SALWA TUNNISA HANIFAH",
+            "SRI WAHYUNI", "UPAIRA NUR APIPAH"
+        ];
+        
+        const statusOptions = [
+            { text: "✔️ Hadir", value: "Hadir" },
+            { text: "📄 Izin", value: "Izin" },
+            { text: "🤒 Sakit", value: "Sakit" },
+            { text: "❌ Alfa", value: "Alfa" }
+        ];
+        
+        let attendanceData = {};
+        let students = [...defaultStudents];
+        let selectedDate = new Date();
+
+        // ================= FUNGSI UTAMA =================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inisialisasi aplikasi
+            initApp();
+            
+            // Event listeners
+            setupEventListeners();
+        });
+
+        function initApp() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            // Set tanggal default ke hari ini
+            const today = new Date();
+            const formattedToday = formatDateInput(today);
+            document.getElementById('attendance-date').value = formattedToday;
+            updateSelectedDateDisplay(today);
+            loadAttendanceForDate(today);
+        }
+
+        function setupEventListeners() {
+            // Login Form
+            const loginForm = document.getElementById('loginForm');
+            const errorMsg = document.getElementById('error-message');
+            
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value.trim();
+                
+                if (username === 'lita' && password === 'kelas5') {
+                    showSlide('home-page');
+                    errorMsg.style.display = 'none';
+                } else {
+                    errorMsg.style.display = 'block';
+                    document.getElementById('password').value = '';
+                }
+            });
+            
+            document.getElementById('username').addEventListener('input', () => errorMsg.style.display='none');
+            document.getElementById('password').addEventListener('input', () => errorMsg.style.display='none');
+            document.getElementById('togglePasswordBtn').addEventListener('click', togglePassword);
+            document.getElementById('togglePasswordBtn').addEventListener('keypress', function(e) {
+                if (e.key === "Enter" || e.key === " ") togglePassword();
+            });
+
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                showSlide('login-page');
+            });
+
+            // Date picker
+            document.getElementById('attendance-date').addEventListener('change', function() {
+                const date = new Date(this.value);
+                selectedDate = date;
+                updateSelectedDateDisplay(date);
+                loadAttendanceForDate(date);
+            });
+            
+            // Tombol Muat Kehadiran
+            document.getElementById('btnLoadAttendance').addEventListener('click', function() {
+                const dateInput = document.getElementById('attendance-date').value;
+                if (dateInput) {
+                    const date = new Date(dateInput);
+                    selectedDate = date;
+                    updateSelectedDateDisplay(date);
+                    loadAttendanceForDate(date);
+                }
+            });
+
+            // Tombol Aksi
+            document.getElementById('btnHadirSemua').addEventListener('click', markAllPresent);
+            document.getElementById('btnKirimAbsen').addEventListener('click', submitAttendance);
+            document.getElementById('btnRekapHarian').addEventListener('click', showRekapHarian);
+            document.getElementById('btnRekapBulanan').addEventListener('click', showRekapBulanan);
+            document.getElementById('closeRekapModal').addEventListener('click', closeRekapModal);
+            document.getElementById('rekapModal').addEventListener('click', function(e){
+                if(e.target === this) closeRekapModal();
+            });
+        }
+
+        // ================= FUNGSI UTILITAS =================
+        function formatDateInput(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function formatDate(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+        }
+
+        function updateSelectedDateDisplay(date) {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('selected-date-display').textContent = 
+                date.toLocaleDateString('id-ID', options);
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('id-ID', options);
+            
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('digital-clock').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        function showSlide(slideId) {
+            document.querySelectorAll('.slide-container').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            document.getElementById(slideId).classList.add('active');
+        }
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const icon = document.getElementById('togglePasswordBtn');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            }
+        }
+
+        function getInitials(name) {
+            const parts = name.split(' ');
+            if (parts.length === 1) {
+                return parts[0].substring(0,2).toUpperCase();
+            }
+            return parts.map(part => part[0]).join('').substring(0,2).toUpperCase();
+        }
+
+        // ================= FUNGSI ABSENSI =================
+        async function loadAttendanceForDate(date) {
+            const formattedDate = formatDate(date);
+            document.getElementById('students-container').innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Memuat data...</div>';
+            
+            try {
+                const res = await fetch(`${SHEETDB_URL}/search?Tanggal=${encodeURIComponent(formattedDate)}`);
+                const data = await res.json();
+                attendanceData = {};
+                
+                if (Array.isArray(data) && data.length > 0) {
+                    data.forEach(item => {
+                        if (item["Nama Siswa"] && item["Status Kehadiran"]) {
+                            attendanceData[item["Nama Siswa"]] = item["Status Kehadiran"];
+                        }
+                    });
+                    
+                    // Set default 'Alfa' untuk siswa yang tidak ada datanya
+                    students.forEach(student => {
+                        if (!attendanceData[student]) {
+                            attendanceData[student] = 'Alfa';
+                        }
+                    });
+                } else {
+                    // Jika tidak ada data, set semua siswa sebagai 'Alfa'
+                    students.forEach(student => {
+                        attendanceData[student] = 'Alfa';
+                    });
+                }
+                
+                generateStudentCards();
+            } catch (e) {
+                console.error("Error loading attendance:", e);
+                students.forEach(student => {
+                    attendanceData[student] = 'Alfa';
+                });
+                generateStudentCards();
+                document.getElementById('students-container').innerHTML += '<div class="no-data" style="color:#e74c3c;">Gagal memuat data absensi!</div>';
+            }
+        }
+
+        function generateStudentCards() {
+            const container = document.getElementById('students-container');
+            container.innerHTML = '';
+            
+            students.forEach((student) => {
+                if (!attendanceData[student]) {
+                    attendanceData[student] = 'Alfa';
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'student-card';
+                
+                const select = document.createElement('select');
+                select.className = 'attendance-status';
+                
+                statusOptions.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt.value;
+                    option.textContent = opt.text;
+                    if (attendanceData[student] === opt.value) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+                
+                select.addEventListener('change', function() {
+                    updateAttendance(student, select.value);
+                });
+                
+                card.innerHTML = `
+                    <div class="student-avatar">${getInitials(student)}</div>
+                    <div class="student-name">${student}</div>
+                `;
+                
+                card.appendChild(select);
+                container.appendChild(card);
+            });
+        }
+
+        function updateAttendance(student, status) {
+            attendanceData[student] = status;
+        }
+
+        function markAllPresent() {
+            students.forEach(student => {
+                attendanceData[student] = 'Hadir';
+            });
+            generateStudentCards();
+        }
+
+        async function submitAttendance() {
+            const formattedDate = formatDate(selectedDate);
+            const dataArr = students.map(nama => ({
+                Tanggal: formattedDate,
+                "Nama Siswa": nama,
+                "Status Kehadiran": attendanceData[nama] || 'Alfa'
+            }));
+            
+            const message = document.getElementById('success-message');
+            let sukses = 0, gagal = 0;
+            
+            try {
+                // Coba kirim semua data sekaligus
+                const res = await fetch(SHEETDB_URL, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ data: dataArr })
+                });
+                
+                if (res.ok) {
+                    sukses = students.length;
+                } else {
+                    // Jika gagal, coba kirim satu per satu
+                    for (const nama of students) {
+                        const data = {
+                            Tanggal: formattedDate,
+                            "Nama Siswa": nama,
+                            "Status Kehadiran": attendanceData[nama] || 'Alfa'
+                        };
+                        
+                        try {
+                            const resSingle = await fetch(SHEETDB_URL, {
+                                method: "POST",
+                                headers: {"Content-Type": "application/json"},
+                                body: JSON.stringify({ data })
+                            });
+                            
+                            if (resSingle.ok) sukses++; 
+                            else gagal++;
+                        } catch (e) {
+                            gagal++;
+                        }
+                    }
+                }
+            } catch (e) {
+                // Jika error jaringan, coba kirim satu per satu
+                for (const nama of students) {
+                    const data = {
+                        Tanggal: formattedDate,
+                        "Nama Siswa": nama,
+                        "Status Kehadiran": attendanceData[nama] || 'Alfa'
+                    };
+                    
+                    try {
+                        const resSingle = await fetch(SHEETDB_URL, {
+                            method: "POST",
+                            headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify({ data })
+                        });
+                        
+                        if (resSingle.ok) sukses++; 
+                        else gagal++;
+                    } catch (e) {
+                        gagal++;
+                    }
+                }
+            }
+            
+            // Tampilkan pesan hasil
+            if (sukses > 0 && gagal === 0) {
+                message.textContent = 'Semua absensi berhasil dikirim!';
+            } else if (sukses > 0) {
+                message.textContent = `Sebagian absensi berhasil (${sukses}), gagal (${gagal}).`;
+            } else {
+                message.textContent = 'Gagal kirim absensi!';
+            }
+            
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000);
+
+            // Muat ulang data absensi
+            await loadAttendanceForDate(selectedDate);
+        }
+
+        // ================= FUNGSI REKAP =================
+        function showRekapModal(contentHTML) {
+            document.getElementById('rekapModalContent').innerHTML = 
+                '<span class="close-modal" id="closeRekapModal">&times;</span>' + contentHTML;
+            document.getElementById('rekapModal').classList.add('active');
+            document.getElementById('closeRekapModal').addEventListener('click', closeRekapModal);
+        }
+
+        function closeRekapModal() {
+            document.getElementById('rekapModal').classList.remove('active');
+        }
+
+        // REKAP HARIAN
+        function showRekapHarian() {
+            let dateInputHTML = `
+                <div class="rekap-controls">
+                    <label for="rekapTanggal"><b>Pilih Tanggal:</b></label>
+                    <input type="date" id="rekapTanggal" value="${formatDateInput(selectedDate)}">
+                    <button id="btnCariRekapHarian" class="action-button submit-attendance" style="padding:7px 15px;">
+                        <i class="fas fa-search"></i> Tampilkan
+                    </button>
+                </div>
+                <div id="rekapHarianResult"></div>
+            `;
+            
+            showRekapModal(`<h2>Rekap Harian</h2>${dateInputHTML}`);
+            
+            document.getElementById('btnCariRekapHarian').addEventListener('click', function() {
+                const tanggal = document.getElementById('rekapTanggal').value;
+                if (tanggal) {
+                    const dateObj = new Date(tanggal);
+                    loadRekapHarian(dateObj);
+                }
+            });
+            
+            loadRekapHarian(selectedDate);
+        }
+
+        async function loadRekapHarian(date) {
+            const formattedDate = formatDate(date);
+            const resultDiv = document.getElementById('rekapHarianResult');
+            resultDiv.innerHTML = "<div class='loading'><i class='fas fa-spinner fa-spin'></i> Memuat data...</div>";
+            
+            try {
+                const res = await fetch(`${SHEETDB_URL}/search?Tanggal=${encodeURIComponent(formattedDate)}`);
+                const data = await res.json();
+                
+                if (!Array.isArray(data) || data.length === 0) {
+                    resultDiv.innerHTML = `<div class="no-data">Tidak ada data absensi untuk tanggal <b>${formattedDate}</b></div>`;
+                    return;
+                }
+                
+                let searchHTML = `
+                    <div class="search-container">
+                        <input type="text" id="searchRekapHarian" placeholder="Cari nama siswa...">
+                    </div>
+                `;
+                
+                let tableHTML = `
+                    <table class="rekap-table">
+                        <thead>
+                            <tr>
+                                <th>Nama Siswa</th>
+                                <th>Status Kehadiran</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                for (let row of data) {
+                    const statusClass = `status-${row["Status Kehadiran"]?.toLowerCase() || ''}`;
+                    tableHTML += `
+                        <tr class="${statusClass}">
+                            <td>${row["Nama Siswa"] || "-"}</td>
+                            <td>${row["Status Kehadiran"] || "-"}</td>
+                        </tr>
+                    `;
+                }
+                
+                tableHTML += `</tbody></table>`;
+                resultDiv.innerHTML = searchHTML + tableHTML;
+                
+                // Fungsi pencarian
+                document.getElementById('searchRekapHarian').addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const rows = document.querySelectorAll('.rekap-table tbody tr');
+                    
+                    rows.forEach(row => {
+                        const name = row.cells[0].textContent.toLowerCase();
+                        row.style.display = name.includes(searchTerm) ? '' : 'none';
+                    });
+                });
+            } catch(e) {
+                resultDiv.innerHTML = `
+                    <div class="no-data" style="color:#e74c3c">
+                        Gagal memuat data: ${e.message}
+                    </div>
+                `;
+            }
+        }
+
+        // REKAP BULANAN
+        function showRekapBulanan() {
+            const now = new Date();
+            const thisMonth = String(now.getMonth() + 1).padStart(2, '0');
+            const thisYear = now.getFullYear();
+            
+            const bulanInputHTML = `
+                <div class="rekap-controls">
+                    <label for="rekapBulan"><b>Pilih Bulan:</b></label>
+                    <select id="rekapBulan">
+                        ${getBulanOptions(thisMonth)}
+                    </select>
+                    <label for="rekapTahun"><b>Tahun:</b></label>
+                    <input type="number" id="rekapTahun" min="2023" max="${thisYear}" value="${thisYear}" style="width:90px;">
+                    <button id="btnCariRekapBulanan" class="action-button rekap-bulanan" style="padding:7px 15px;">
+                        <i class="fas fa-search"></i> Tampilkan
+                    </button>
+                </div>
+                <div id="rekapBulananResult"></div>
+            `;
+            
+            showRekapModal(`<h2>Rekap Bulanan</h2>${bulanInputHTML}`);
+            
+            document.getElementById('btnCariRekapBulanan').addEventListener('click', function() {
+                const bulan = document.getElementById('rekapBulan').value;
+                const tahun = document.getElementById('rekapTahun').value;
+                loadRekapBulanan(bulan, tahun);
+            });
+            
+            loadRekapBulanan(thisMonth, thisYear);
+        }
+
+        function getBulanOptions(selected) {
+            const bulanArr = [
+                "01|Januari", "02|Februari", "03|Maret", "04|April", "05|Mei", "06|Juni",
+                "07|Juli", "08|Agustus", "09|September", "10|Oktober", "11|November", "12|Desember"
+            ];
+            
+            return bulanArr.map(b => {
+                const [val, label] = b.split('|');
+                return `<option value="${val}" ${val === selected ? 'selected' : ''}>${label}</option>`;
+            }).join('');
+        }
+
+        async function loadRekapBulanan(bulan, tahun) {
+            const resultDiv = document.getElementById('rekapBulananResult');
+            resultDiv.innerHTML = "<div class='loading'><i class='fas fa-spinner fa-spin'></i> Memuat data...</div>";
+            
+            try {
+                const res = await fetch(SHEETDB_URL);
+                const allData = await res.json();
+                
+                if (!Array.isArray(allData) || allData.length === 0) {
+                    resultDiv.innerHTML = `<div class="no-data">Tidak ada data absensi</div>`;
+                    return;
+                }
+                
+                // Filter data berdasarkan bulan dan tahun
+                const filteredData = allData.filter(row => {
+                    if (!row.Tanggal) return false;
+                    const [day, month, year] = row.Tanggal.split('-');
+                    return month === bulan && year === tahun;
+                });
+                
+                if (filteredData.length === 0) {
+                    resultDiv.innerHTML = `
+                        <div class="no-data">
+                            Tidak ada data absensi untuk bulan <b>${bulan}-${tahun}</b>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Kelompokkan data per siswa
+                const siswaMap = {};
+                for (let row of filteredData) {
+                    const nama = row["Nama Siswa"];
+                    const status = row["Status Kehadiran"];
+                    
+                    if (!siswaMap[nama]) {
+                        siswaMap[nama] = { Hadir: 0, Izin: 0, Sakit: 0, Alfa: 0 };
+                    }
+                    
+                    if (status === "Hadir") siswaMap[nama].Hadir++;
+                    else if (status === "Izin") siswaMap[nama].Izin++;
+                    else if (status === "Sakit") siswaMap[nama].Sakit++;
+                    else siswaMap[nama].Alfa++;
+                }
+                
+                // Buat tabel rekap
+                let searchHTML = `
+                    <div class="search-container">
+                        <input type="text" id="searchRekapBulanan" placeholder="Cari nama siswa...">
+                    </div>
+                `;
+                
+                let tableHTML = `
+                    <table class="rekap-table">
+                        <thead>
+                            <tr>
+                                <th>Nama Siswa</th>
+                                <th>Hadir</th>
+                                <th>Izin</th>
+                                <th>Sakit</th>
+                                <th>Alfa</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                for (let nama in siswaMap) {
+                    const total = siswaMap[nama].Hadir + siswaMap[nama].Izin + 
+                                 siswaMap[nama].Sakit + siswaMap[nama].Alfa;
+                    
+                    tableHTML += `
+                        <tr>
+                            <td>${nama}</td>
+                            <td>${siswaMap[nama].Hadir}</td>
+                            <td>${siswaMap[nama].Izin}</td>
+                            <td>${siswaMap[nama].Sakit}</td>
+                            <td>${siswaMap[nama].Alfa}</td>
+                            <td><strong>${total}</strong></td>
+                        </tr>
+                    `;
+                }
+                
+                tableHTML += `</tbody></table>`;
+                
+                // Tombol simpan rekap
+                const simpanBtnHTML = `
+                    <button id="btnSimpanRekapBulanan" class="action-button rekap-bulanan" style="padding:7px 15px; margin-top:10px;">
+                        <i class="fas fa-save"></i> Simpan Rekap Bulanan ke Google Sheet
+                    </button>
+                `;
+                
+                resultDiv.innerHTML = searchHTML + tableHTML + simpanBtnHTML;
+                
+                // Fungsi pencarian
+                document.getElementById('searchRekapBulanan').addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const rows = document.querySelectorAll('.rekap-table tbody tr');
+                    
+                    rows.forEach(row => {
+                        const name = row.cells[0].textContent.toLowerCase();
+                        row.style.display = name.includes(searchTerm) ? '' : 'none';
+                    });
+                });
+
+                // Handler tombol simpan rekap
+                document.getElementById('btnSimpanRekapBulanan').addEventListener('click', function() {
+                    simpanRekapBulanan(siswaMap, bulan, tahun);
+                });
+            } catch(e) {
+                resultDiv.innerHTML = `
+                    <div class="no-data" style="color:#e74c3c">
+                        Gagal memuat data: ${e.message}
+                    </div>
+                `;
+            }
+        }
+
+        // SIMPAN REKAP BULANAN KE SHEETDB
+        async function simpanRekapBulanan(siswaMap, bulan, tahun) {
+            // Konversi angka bulan ke nama bulan
+            const namaBulan = [
+                "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+            ][parseInt(bulan)-1] || bulan;
+            
+            // Siapkan data untuk dikirim
+            const dataArr = Object.entries(siswaMap).map(([nama, stat]) => ({
+                "Nama Siswa": nama,
+                "Bulan": namaBulan,
+                "Tahun": tahun,
+                "Hadir": stat.Hadir,
+                "Izin": stat.Izin,
+                "Sakit": stat.Sakit,
+                "Alfa": stat.Alfa,
+                "Total": stat.Hadir + stat.Izin + stat.Sakit + stat.Alfa
+            }));
+            
+            try {
+                console.log("Mengirim data rekap bulanan:", dataArr);
+                
+                const res = await fetch(SHEETDB_URL_REKAP_BULANAN, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ data: dataArr })
+                });
+                
+                const result = await res.json();
+                console.log("Response SheetDB:", result);
+                
+                if (result.created && result.created > 0) {
+                    alert(`✅ Berhasil menyimpan ${result.created} data rekap bulanan!`);
+                } else {
+                    const errorMsg = result.error || result.message || "Gagal tanpa pesan error";
+                    throw new Error(errorMsg);
+                }
+            } catch (error) {
+                console.error("Error saat menyimpan rekap bulanan:", error);
+                
+                // Coba simpan satu per satu jika batch gagal
+                let sukses = 0;
+                const totalData = dataArr.length;
+                
+                for (const data of dataArr) {
+                    try {
+                        const res = await fetch(SHEETDB_URL_REKAP_BULANAN, {
+                            method: "POST",
+                            headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify({ data: [data] }) // Kirim satu per satu
+                        });
+                        
+                        const result = await res.json();
+                        if (result.created === 1) sukses++;
+                    } catch (e) {
+                        console.error(`Gagal menyimpan data ${data.Nama Siswa}:`, e);
+                    }
+                }
+                
+                if (sukses === totalData) {
+                    alert("✅ Semua data rekap berhasil disimpan (satu per satu)");
+                } else if (sukses > 0) {
+                    alert(`⚠️ ${sukses}/${totalData} data rekap berhasil disimpan`);
+                } else {
+                    alert("❌ Gagal menyimpan semua data rekap");
+                }
+            }
+        }
+    </script>
+</body>
+</html>
